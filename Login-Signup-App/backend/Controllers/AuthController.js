@@ -17,13 +17,13 @@ const signup = async (req, res) => {
         const userModel = new UserModel({name, email, password})
         userModel.password = await bcrypt.hash(password, 10)
         await userModel.save();
-        res.status(201).json({
+        return res.status(201).json({
             message: "Signup succesfully !",
             success: true
         })
 
     }catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message: "Internal server error !",
             success: false
         })
@@ -44,7 +44,7 @@ const login = async (req, res) => {
 
         const isPassEqual = await bcrypt.compare(password, user.password)
         if(!isPassEqual){
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Incorrect password !",
                 success: false
             })
@@ -55,7 +55,7 @@ const login = async (req, res) => {
             {expiresIn: '24h'}
         )
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Login succesfully !",
             success: true,
             jwtToken,
@@ -64,7 +64,7 @@ const login = async (req, res) => {
         })
 
     }catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message: "Internal server error !",
             success: false
         })
